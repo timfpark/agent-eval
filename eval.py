@@ -34,7 +34,7 @@ class Evaluator:
         self.model = model
         self.tools = tools
         self.scenarios = scenarios
-
+            
         self.results = {}
 
         for tool in tools:
@@ -50,8 +50,6 @@ class Evaluator:
         tool_name = scenario["tool_name"]
         expected_arguments = scenario["expected_arguments"]
         prompt = scenario["prompt"]
-
-        # print(f"evaluating: {tool_name} with prompt: {prompt} and expected arguments: {expected_arguments}")
 
         start_time = time.time()
 
@@ -84,6 +82,10 @@ class Evaluator:
 #            print(f"function selection failed: {function_call_response["name"]} vs. expected {tool_name}")
 
     def evaluate(self):
+        # warm up model
+        if len(scenarios) > 0:
+            self.model.invoke(scenarios[0]["prompt"])
+
         for scenario in self.scenarios:
             self.evaluate_scenario(scenario)
 
@@ -98,7 +100,7 @@ class Evaluator:
                 print(f"latency: {min(self.results[tool_name]["latencies"])}ms min | {avg_latency_ms} ms avg | {max(self.results[tool_name]["latencies"])} ms max")
                 print()
 
-models = ["phi3:3.8b-mini-instruct-4k-q4_K_M", "llama3:8b-instruct-q4_0", "wizardlm2:7b-q4_0"]
+models = ["phi3:3.8b-mini-instruct-4k-q4_K_M"] # , "llama3:8b-instruct-q4_0", "wizardlm2:7b-q4_0"]
 available_tools = [GetCurrentWeatherTool(), SetCarTemperatureSetpointTool(), GetCarTemperatureSetpointTool()]
  
 reproducability_seed = random.randint(1, 100000)
@@ -117,7 +119,7 @@ for model in models:
         base_url="http://localhost:11434",
     )
 
-    for number_of_tools in range(1, len(available_tools)):
+    for number_of_tools in range(1, len(available_tools)+1):
         print(f"evaluating with {number_of_tools} tools")
 
         selected_tools = random.sample(available_tools, number_of_tools)
