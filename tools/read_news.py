@@ -1,6 +1,3 @@
-import nltk
-from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize
 import random
 
 class ReadNewsTool:
@@ -19,12 +16,6 @@ class ReadNewsTool:
         "What's the latest news on {}?",
         "What's the latest with {}?",
     ]
-
-    def __init__(self):
-        nltk.download('stopwords')
-        nltk.download('punkt')
-
-        self.stop_words = set(stopwords.words('english'))
 
     def get_name(self):
         return "read_news"
@@ -47,14 +38,12 @@ class ReadNewsTool:
     
     def generate_scenario(self):
         subject = random.choice(self.subjects)
-        subject_tokenized = word_tokenize(subject)
-        filtered_subject = " ".join([w for w in subject_tokenized if not w in self.stop_words])
 
         template = random.choice(self.templates)
         return {
             "tool_name": self.get_name(),
             "prompt": template.format(subject),
             "expected_arguments": {
-                "subject": filtered_subject,
+                "subject": subject,
             }
         }

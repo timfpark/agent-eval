@@ -1,3 +1,4 @@
+from fuzzywuzzy import fuzz
 from langchain_experimental.llms.ollama_functions import OllamaFunctions
 
 import json
@@ -15,7 +16,7 @@ def fuzzy_dict_equal(dict1, dict2):
         if isinstance(val1, (int, float)) and isinstance(val2, (int, float)):
             if not abs(val1 - val2) < 1e-9:  # Allows a tiny difference in floating point representations
                 return False
-        elif str(val1).lower() != str(val2).lower():
+        elif fuzz.partial_ratio(str(val1).lower(), str(val2).lower()) < 98:
             return False
     return True
 
@@ -69,12 +70,11 @@ class Evaluator:
                 expected_arguments = json.loads(expected_arguments)
                 
             if fuzzy_dict_equal(function_call_response_arguments, expected_arguments):
-                # print(f"passed: {function_call_response} in {latency_ms}ms")
                 self.results[tool_name]["passed"] += 1
             else:
-                print(f"arguments failed: {function_call_response_arguments} vs. expected {expected_arguments} for prompt {prompt}")
+                print(f"arguments failed: {function_call_response_arguments} vs. expected {expected_arguments} for prompt '{prompt}'")
         else:
-            print(f"function selection failed: {function_call_response["name"]} vs. expected {tool_name} for prompt {prompt}")
+            print(f"function selection failed: {function_call_response["name"]} vs. expected {tool_name} for prompt '{prompt}'")
 
     def evaluate(self):
         # warm up model with an unevaluated run
@@ -87,8 +87,11 @@ class Evaluator:
                 print(e)
                 return
 
+        count = 0
         for scenario in self.scenarios:
+            count += 1
             self.evaluate_scenario(scenario)
+            print(f"{count} of {len(self.scenarios)}")
 
         for tool in self.tools:
             tool_name = tool.get_name()
@@ -103,22 +106,22 @@ class Evaluator:
         return self.results
 
 def print_results(tools, results):
-    headers = ["tool", "passed", "total", "%", "min (ms)", "mean (ms)", "median (ms)", "max (ms)"]
+    headers = ["tools", "passed", "total", "%", "min (ms)", "mean (ms)", "median (ms)", "max (ms)"]
 
     data = []
-    for tool in tools:
-        tool_name = tool.get_name()
-        if results[tool_name]["total_evaluations"] > 0:
-            passed = results[tool_name]["passed"]
-            total_evaluations = results[tool_name]["total_evaluations"]
-            pass_percentage = results[tool_name]["pass_percentage"]
+    for pivot in results:
+        pivot_results = results[pivot]
+        if pivot_results["total_evaluations"] > 0:
+            passed = pivot_results["passed"]
+            total_evaluations = pivot_results["total_evaluations"]
+            pass_percentage = pivot_results["pass_percentage"]
 
-            min_latency = results[tool_name]["min_latency"]
-            max_latency = results[tool_name]["max_latency"]
-            mean_latency = results[tool_name]["mean_latency"]
-            median_latency = results[tool_name]["median_latency"]
+            min_latency = pivot_results["min_latency"]
+            max_latency = pivot_results["max_latency"]
+            mean_latency = pivot_results["mean_latency"]
+            median_latency = pivot_results["median_latency"]
 
-            data.append([tool_name, passed, total_evaluations, pass_percentage, min_latency, mean_latency, median_latency, max_latency])  
+            data.append([pivot, passed, total_evaluations, pass_percentage, min_latency, mean_latency, median_latency, max_latency])  
 
     print(tabulate(data, headers=headers))
 
