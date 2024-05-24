@@ -82,23 +82,7 @@ You are an AI assistant that can help the user with a variety of tasks. You have
             }
         ]
     },
-    {    
-        "name": "get_mean",
-        "description": "Calculates the mean of a list of integers",
-        "parameters": [
-            {
-                "name": "nummbers",
-                "type": "list[int]",
-            }
-        ],
-        "required": [ "numbers" ],
-        "returns": [
-            {
-                "name": "mean",
-                "type": "float",
-            }
-        ]
-    }.
+
     {
         "name": "send_email",
         "description": "Sends an email with the given subject, body, and recipient",

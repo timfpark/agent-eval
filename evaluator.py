@@ -21,69 +21,69 @@ def fuzzy_dict_equal(dict1, dict2):
     return True
 
 class Evaluator:
-    def __init__(self, model, tools, scenarios):
-        self.model = model
-        self.tools = tools
+    def __init__(self, backend, functions, scenarios):
+        self.backend = backend
+        self.functions = functions
         self.scenarios = scenarios
             
         self.results = {}
 
-        for tool in tools:
-            self.results[tool.get_name()] = {
+        for function in functions:
+            self.results[function.get_name()] = {
                 "passed": 0,
                 "total_evaluations": 0,
                 "latencies": []
             }
 
     def evaluate_scenario(self, scenario):
-        tool_name = scenario["tool_name"]
-        expected_arguments = scenario["expected_arguments"]
-        prompt = scenario["prompt"]
+        function_name = scenario["function"]
+        expected = scenario["expected"]
+        user_input = scenario["user_input"]
+
+        expected_arguments = expected["arguments"]
+        expected_function = expected["function"]
 
         start_time = time.time()
 
-        self.results[tool_name]["total_evaluations"] += 1
+        self.results[function_name]["total_evaluations"] += 1
         
         try:
-            response = self.model.invoke(prompt)
+            response = self.backend.execute(user_input)
         except Exception as e:
-            print(f"failed to invoke model with prompt {prompt}")
+            print(f"failed to invoke model with user_input {user_input}")
             print(e)
             return
 
         end_time = time.time()
         latency_ms = (end_time - start_time) * 1000.0
 
-        self.results[tool_name]["latencies"].append(latency_ms)
+        self.results[function_name]["latencies"].append(latency_ms)
         
-        function_call_response = response.additional_kwargs["function_call"]
-
-        if function_call_response["name"] == tool_name:
-            if isinstance(function_call_response["arguments"], str):
-                function_call_response_arguments = function_call_response["arguments"]
-                if function_call_response_arguments == '':
-                    function_call_response_arguments = '{}'
-                function_call_response_arguments = json.loads(function_call_response_arguments)
+        if response["function"] == expected_function:
+            if isinstance(response["arguments"], str):
+                if response["arguments"] == '':
+                    response["arguments"] = '{}'
+                response["arguments"] = json.loads(response["arguments"])
 
             if not isinstance(expected_arguments, dict):
                 print(f"*** expected_arguments is not dict: {expected_arguments}")
                 expected_arguments = json.loads(expected_arguments)
                 
-            if fuzzy_dict_equal(function_call_response_arguments, expected_arguments):
-                self.results[tool_name]["passed"] += 1
+            if fuzzy_dict_equal(response["arguments"], expected_arguments):
+                self.results[function_name]["passed"] += 1
             else:
-                print(f"arguments failed: {function_call_response_arguments} vs. expected {expected_arguments} for prompt '{prompt}'")
+                print(f"arguments failed: {response["arguments"]} vs. expected {expected_arguments} for prompt '{user_input}'")
         else:
-            print(f"function selection failed: {function_call_response["name"]} vs. expected {tool_name} for prompt '{prompt}'")
+            print(f"function selection failed: '{response["function"]}' vs. expected '{expected_function}' for prompt '{user_input}'")
 
     def evaluate(self):
         # warm up model with an unevaluated run
         if len(self.scenarios) > 0:
             try:
-                prompt = self.scenarios[0]["prompt"]
-                response = self.model.invoke(prompt)
+                user_input = self.scenarios[0]["user_input"]
+                self.backend.execute(user_input)
             except Exception as e:
-                print(f"failed to invoke model with prompt {prompt}")
+                print(f"failed to invoke model with user_input {user_input}")
                 print(e)
                 return
 
@@ -93,20 +93,20 @@ class Evaluator:
             self.evaluate_scenario(scenario)
             print(f"{count} of {len(self.scenarios)}")
 
-        for tool in self.tools:
-            tool_name = tool.get_name()
-            if self.results[tool_name]["total_evaluations"] > 0:
-                latencies = self.results[tool_name]["latencies"]
-                self.results[tool_name]["min_latency"] = min(latencies)
-                self.results[tool_name]["max_latency"] = max(latencies)
-                self.results[tool_name]["mean_latency"] = sum(latencies) / len(latencies)
-                self.results[tool_name]["median_latency"] = statistics.median(latencies)
-                self.results[tool_name]["pass_percentage"] = (self.results[tool_name]["passed"] / self.results[tool_name]["total_evaluations"]) * 100.0
+        for function in self.functions:
+            function_name = function.get_name()
+            if self.results[function_name]["total_evaluations"] > 0:
+                latencies = self.results[function_name]["latencies"]
+                self.results[function_name]["min_latency"] = min(latencies)
+                self.results[function_name]["max_latency"] = max(latencies)
+                self.results[function_name]["mean_latency"] = sum(latencies) / len(latencies)
+                self.results[function_name]["median_latency"] = statistics.median(latencies)
+                self.results[function_name]["pass_percentage"] = (self.results[function_name]["passed"] / self.results[function_name]["total_evaluations"]) * 100.0
 
         return self.results
 
-def print_results(tools, results):
-    headers = ["tools", "passed", "total", "%", "min (ms)", "mean (ms)", "median (ms)", "max (ms)"]
+def print_results(results):
+    headers = ["functions", "passed", "total", "%", "min (ms)", "mean (ms)", "median (ms)", "max (ms)"]
 
     data = []
     for pivot in results:
@@ -125,21 +125,10 @@ def print_results(tools, results):
 
     print(tabulate(data, headers=headers))
 
-def evaluate_with_ollama(model_tag, tools, scenarios):
-    model = OllamaFunctions(
-        model=model_tag, 
-        keep_alive=-1,
-        format="json",
-        base_url="http://localhost:11434",
-    )
-
-    model = model.bind_tools(
-        tools=[tool.get_definition() for tool in tools]
-    )
-
+def evaluate_with_ollama(backend, functions, scenarios):
     evaluator = Evaluator(
-        model=model,
-        tools=tools,
+        backend=backend,
+        functions=functions,
         scenarios=scenarios
     )
 
