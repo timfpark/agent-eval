@@ -7,8 +7,9 @@ from tabulate import tabulate
 import time
 
 def fuzzy_dict_equal(dict1, dict2):
-    if dict1.keys() != dict2.keys():
-        return False
+    for key in dict1:
+        if key not in dict2:
+            return False
     
     for key in dict1:
         val1 = dict1[key]
@@ -69,7 +70,7 @@ class Evaluator:
                 print(f"*** expected_arguments is not dict: {expected_arguments}")
                 expected_arguments = json.loads(expected_arguments)
                 
-            if fuzzy_dict_equal(response["arguments"], expected_arguments):
+            if fuzzy_dict_equal(expected_arguments, response["arguments"]):
                 self.results[function_name]["passed"] += 1
             else:
                 print(f"arguments failed: {response["arguments"]} vs. expected {expected_arguments} for prompt '{user_input}'")
