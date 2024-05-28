@@ -36,3 +36,6 @@ class UnhandledRequest:
         template = random.choice(self.templates)
 
         return self.generate_scenario(template)
+    
+    def are_valid_arguments(self, arguments):
+        return isinstance(arguments, dict) and len(arguments) == 0

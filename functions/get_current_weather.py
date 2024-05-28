@@ -145,3 +145,7 @@ class GetCurrentWeatherTool:
                 "location": city_name,
             }
         }
+    
+    def are_valid_arguments(self, arguments):
+        return isinstance(arguments, dict) and "location" in arguments
+

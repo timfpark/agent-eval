@@ -52,3 +52,6 @@ class LockDoors:
         template = random.choice(self.templates)
 
         return self.generate_scenario(template, lock)
+    
+    def are_valid_arguments(self, arguments):
+        return isinstance(arguments, dict) and "lock" in arguments

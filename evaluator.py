@@ -21,6 +21,14 @@ def fuzzy_dict_equal(dict1, dict2):
             return False
     return True
 
+def parse_arguments(arguments):
+    if isinstance(arguments, str):
+        if arguments == '':
+            arguments = '{}'
+        arguments = json.loads(arguments)
+
+    return arguments
+
 class Evaluator:
     def __init__(self, backend, functions, scenarios):
         self.backend = backend
@@ -33,6 +41,7 @@ class Evaluator:
             self.results[function.get_name()] = {
                 "passed": 0,
                 "total_evaluations": 0,
+                "incorrect_but_valid": 0,
                 "latencies": []
             }
 
@@ -59,13 +68,10 @@ class Evaluator:
         latency_ms = (end_time - start_time) * 1000.0
 
         self.results[function_name]["latencies"].append(latency_ms)
-        
-        if response["function"] == expected_function:
-            if isinstance(response["arguments"], str):
-                if response["arguments"] == '':
-                    response["arguments"] = '{}'
-                response["arguments"] = json.loads(response["arguments"])
 
+        response["arguments"] = parse_arguments(response["arguments"])
+
+        if response["function"] == expected_function:
             if not isinstance(expected_arguments, dict):
                 print(f"*** expected_arguments is not dict: {expected_arguments}")
                 expected_arguments = json.loads(expected_arguments)
@@ -76,6 +82,12 @@ class Evaluator:
                 print(f"arguments failed: {response["arguments"]} vs. expected {expected_arguments} for prompt '{user_input}'")
         else:
             print(f"function selection failed: '{response["function"]}' vs. expected '{expected_function}' for prompt '{user_input}'")
+
+            for function in self.functions:
+                if function.get_name() == response["function"] and function.are_valid_arguments(response["arguments"]):
+                    print(f"incorrect but valid function call to: {function.get_name()} with arguments: {response["arguments"]} for wrong intent")
+                    self.results[function_name]["incorrect_but_valid"] += 1
+                    break
 
     def evaluate(self):
         # warm up model with an unevaluated run
@@ -98,12 +110,20 @@ class Evaluator:
             function_name = function.get_name()
             if self.results[function_name]["total_evaluations"] > 0:
                 latencies = self.results[function_name]["latencies"]
-                self.results[function_name]["min_latency"] = min(latencies)
-                self.results[function_name]["max_latency"] = max(latencies)
-                self.results[function_name]["mean_latency"] = sum(latencies) / len(latencies)
-                self.results[function_name]["median_latency"] = statistics.median(latencies)
-                self.results[function_name]["pass_percentage"] = (self.results[function_name]["passed"] / self.results[function_name]["total_evaluations"]) * 100.0
 
+                if latencies:
+                    self.results[function_name]["min_latency"] = min(latencies)
+                    self.results[function_name]["max_latency"] = max(latencies)
+                    self.results[function_name]["mean_latency"] = sum(latencies) / len(latencies)
+                    self.results[function_name]["median_latency"] = statistics.median(latencies)
+                    self.results[function_name]["pass_percentage"] = (self.results[function_name]["passed"] / self.results[function_name]["total_evaluations"]) * 100.0
+                else:
+                    self.results[function_name]["min_latency"] = "-"
+                    self.results[function_name]["max_latency"] = "-"
+                    self.results[function_name]["mean_latency"] = "-"
+                    self.results[function_name]["median_latency"] = "-"
+                    self.results[function_name]["pass_percentage"] = "-"
+                    
         return self.results
 
 def print_results(results):

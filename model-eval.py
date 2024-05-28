@@ -13,11 +13,11 @@ from functions.unhandled_request import UnhandledRequest
 
 functions = [LockDoors(), SetCarTemperatureSetpoint(), GetCarTemperatureSetpoint(), TuneRadio(), UnhandledRequest()]
 backends = [
-    OllamaLangchain("phi3:3.8b-mini-instruct-4k-q4_K_M", functions),
-    OllamaLangchain("wizardlm2:7b-q4_0", functions),
-    OllamaLangchain("llama3:8b-instruct-q4_0", functions),
+#    OllamaLangchain("phi3:3.8b-mini-instruct-4k-q4_K_M", functions),
+#    OllamaLangchain("wizardlm2:7b-q4_0", functions),
+#    OllamaLangchain("llama3:8b-instruct-q4_0", functions),
     OllamaLangchain("phi3:14b-medium-4k-instruct-q4_0", functions),
-    OllamaLangchain("phi3:14b-medium-128k-instruct-q4_0", functions),
+#    OllamaLangchain("phi3:14b-medium-128k-instruct-q4_0", functions),
 ]
  
 reproducability_seed = random.randint(1, 100000)
@@ -26,7 +26,7 @@ print()
 
 random.seed(reproducability_seed)
 
-evaluations_per_function = 2000
+evaluations_per_function = 10
 scenarios = []
 for function in functions:
     for i in range(evaluations_per_function):
