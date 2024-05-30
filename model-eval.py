@@ -5,18 +5,23 @@ from backends.ollama_langchain import OllamaLangchain
 
 from evaluator import evaluate_with_ollama, print_results
 
-from functions.lock_doors  import LockDoors
-from functions.tune_radio import TuneRadio
+from functions.call import Call
+from functions.fan_control import FanControl
 from functions.get_car_temp_setpoint import GetCarTemperatureSetpoint
+from functions.lock_doors  import LockDoors
+from functions.pass_to_cloud import PassToCloud
+from functions.navigate import Navigate
 from functions.set_car_temp_setpoint import SetCarTemperatureSetpoint
-from functions.unhandled_request import UnhandledRequest
+from functions.text import Text
+from functions.tune_radio import TuneRadio
+from functions.volume_control import VolumeControl
 
-functions = [LockDoors(), SetCarTemperatureSetpoint(), GetCarTemperatureSetpoint(), TuneRadio(), UnhandledRequest()]
+functions = [Call(), FanControl(), GetCarTemperatureSetpoint(), LockDoors(), Navigate(), SetCarTemperatureSetpoint(), Text(), TuneRadio(), VolumeControl(), PassToCloud()]
 backends = [
-#    OllamaLangchain("phi3:3.8b-mini-instruct-4k-q4_K_M", functions),
-#    OllamaLangchain("wizardlm2:7b-q4_0", functions),
-#    OllamaLangchain("llama3:8b-instruct-q4_0", functions),
     OllamaLangchain("phi3:14b-medium-4k-instruct-q4_0", functions),
+    OllamaLangchain("phi3:3.8b-mini-instruct-4k-q4_K_M", functions),
+    OllamaLangchain("wizardlm2:7b-q4_0", functions),
+    OllamaLangchain("llama3:8b-instruct-q4_0", functions),
 #    OllamaLangchain("phi3:14b-medium-128k-instruct-q4_0", functions),
 ]
  
@@ -26,7 +31,7 @@ print()
 
 random.seed(reproducability_seed)
 
-evaluations_per_function = 10
+evaluations_per_function = 2
 scenarios = []
 for function in functions:
     for i in range(evaluations_per_function):

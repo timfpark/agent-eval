@@ -21,7 +21,7 @@ class TuneRadio:
     def get_definition(self):
         return {
             "name": self.get_name(),
-            "description": "Change the frequency the car's radio is tuned to",
+            "description": "Change the station the car's radio is tuned to",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -30,7 +30,7 @@ class TuneRadio:
                         "description": "The desired radio station to tune",
                     }
                 },
-                "station": ["station"],
+                "required": ["station"],
             },
         }
     

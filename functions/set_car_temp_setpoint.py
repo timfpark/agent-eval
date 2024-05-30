@@ -31,7 +31,8 @@ class SetCarTemperatureSetpoint:
         "Set it at {} degrees, thanks.",
         "Would you mind putting it at {} degrees?",
         "Can you adjust it to {} degrees?",
-        "Please change it to {} degrees for me."
+        "Please change it to {} degrees for me.",
+        "Set the air conditioner to {} degrees.",
     ]
 
     def get_name(self):
