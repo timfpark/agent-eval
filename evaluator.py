@@ -64,6 +64,11 @@ class Evaluator:
             response = self.backend.execute(user_input)
         except Exception as e:
             self.results[function_name]["non_function_response"] += 1
+            
+            end_time = time.time()
+            latency_ms = (end_time - start_time) * 1000.0
+            self.results[function_name]["latencies"].append(latency_ms)
+
             print(f"failed to invoke model with user_input {user_input}")
             # stack_trace = traceback.format_exc()
             print(f"exception returned: {e}")
@@ -72,7 +77,6 @@ class Evaluator:
 
         end_time = time.time()
         latency_ms = (end_time - start_time) * 1000.0
-
         self.results[function_name]["latencies"].append(latency_ms)
 
         response["arguments"] = parse_arguments(response["arguments"])

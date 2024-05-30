@@ -31,7 +31,7 @@ print()
 
 random.seed(reproducability_seed)
 
-evaluations_per_function = 2
+evaluations_per_function = 200
 scenarios = []
 for function in functions:
     for i in range(evaluations_per_function):
@@ -52,7 +52,7 @@ for model_tag in model_results:
     print()
 
 print('dumping results to file')
-with open('results/model-eval-m1-max.json', 'w') as file:
+with open('results/model-eval-amd-7950x3d-rtx4080.json', 'w') as file:
     json.dump(model_results, file)
 
 print("done")
