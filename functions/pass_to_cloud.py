@@ -2,11 +2,11 @@ import random
 
 class PassToCloud:
     templates = [
-        "Can you read me the latest headlines?",
+        "Can you read me the latest headlines",
         "Fetch me a quote for Microsoft's current stock price",
         "Make me reservations at Mentone for 8pm on Tuesday",
-        "When is my next service appointment?",
-        "What's the weather like in San Francisco today?",
+        "When is my next service appointment",
+        "What is the weather like in San Francisco today",
     ]
 
     def get_name(self):
@@ -20,6 +20,7 @@ class PassToCloud:
                 "type": "object",
                 "properties": {},
                 "required": [],
+                "returns": []
             },
         }
     

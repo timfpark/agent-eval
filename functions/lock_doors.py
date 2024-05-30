@@ -31,7 +31,7 @@ class LockDoors:
                         "description": "True if the doors should be locked, False if they should be unlocked",
                     }
                 },
-                "station": ["lock"],
+                "required": ["lock"],
             },
         }
     

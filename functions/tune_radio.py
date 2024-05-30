@@ -31,6 +31,7 @@ class TuneRadio:
                     }
                 },
                 "required": ["station"],
+                "returns": []
             },
         }
     

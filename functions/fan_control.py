@@ -61,6 +61,7 @@ class FanControl:
                     }
                 },
                 "required": ["action"],
+                "returns": []
             },
         }
     

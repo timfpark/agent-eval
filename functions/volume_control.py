@@ -51,6 +51,7 @@ class VolumeControl:
                     }
                 },
                 "required": ["action"],
+                "returns": []
             },
         }
     
@@ -58,4 +59,4 @@ class VolumeControl:
         return random.choice(self.scenarios)
     
     def are_valid_arguments(self, arguments):
-        return isinstance(arguments, dict) and "action" in arguments 
+        return isinstance(arguments, dict) and "change" in arguments 

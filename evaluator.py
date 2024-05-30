@@ -5,6 +5,7 @@ import json
 import statistics
 from tabulate import tabulate
 import time
+import traceback
 
 def fuzzy_dict_equal(dict1, dict2):
     for key in dict1:
@@ -64,7 +65,9 @@ class Evaluator:
         except Exception as e:
             self.results[function_name]["non_function_response"] += 1
             print(f"failed to invoke model with user_input {user_input}")
-            print(e)
+            # stack_trace = traceback.format_exc()
+            print(f"exception returned: {e}")
+            # print(stack_trace)
             return "(n/a) "
 
         end_time = time.time()
@@ -103,9 +106,8 @@ class Evaluator:
                 user_input = self.scenarios[0]["user_input"]
                 self.backend.execute(user_input)
             except Exception as e:
-                print(f"failed to invoke model with user_input {user_input}")
-                print(e)
-                return
+                print(f"failed to invoke model with user prompt {user_input}")
+                print(f"exception returned: {e}")
 
         count = 0
         for scenario in self.scenarios:
