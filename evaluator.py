@@ -40,6 +40,8 @@ class Evaluator:
         for function in functions:
             self.results[function.get_name()] = {
                 "passed": 0,
+                "failed": 0,
+                "non_function_response": 0,
                 "total_evaluations": 0,
                 "incorrect_but_valid": 0,
                 "latencies": []
@@ -60,9 +62,10 @@ class Evaluator:
         try:
             response = self.backend.execute(user_input)
         except Exception as e:
+            self.results[function_name]["non_function_response"] += 1
             print(f"failed to invoke model with user_input {user_input}")
             print(e)
-            return "n/a"
+            return "(n/a) "
 
         end_time = time.time()
         latency_ms = (end_time - start_time) * 1000.0
@@ -82,6 +85,8 @@ class Evaluator:
                 print(f"arguments failed: {response["arguments"]} vs. expected {expected_arguments} for prompt '{user_input}'")
         else:
             print(f"function selection failed: '{response["function"]}' vs. expected '{expected_function}' for prompt '{user_input}'")
+
+            self.results[function_name]["failed"] += 1
 
             for function in self.functions:
                 if function.get_name() == response["function"] and function.are_valid_arguments(response["arguments"]):
@@ -129,13 +134,15 @@ class Evaluator:
         return self.results
 
 def print_results(results):
-    headers = ["functions", "passed", "incorrect but valid function call", "total", "%", "min (ms)", "mean (ms)", "median (ms)", "max (ms)"]
+    headers = ["functions", "passed", "failed", "nfr", "i(bvfc)", "total", "%", "min (ms)", "mean (ms)", "median (ms)", "max (ms)"]
 
     data = []
     for pivot in results:
         pivot_results = results[pivot]
         if pivot_results["total_evaluations"] > 0:
             passed = pivot_results["passed"]
+            failed = pivot_results["failed"]
+            non_function_response = pivot_results["non_function_response"]
             total_evaluations = pivot_results["total_evaluations"]
             incorrect_but_valid = pivot_results["incorrect_but_valid"]
             pass_percentage = pivot_results["pass_percentage"]
@@ -145,7 +152,7 @@ def print_results(results):
             mean_latency = pivot_results["mean_latency"]
             median_latency = pivot_results["median_latency"]
 
-            data.append([pivot, passed, incorrect_but_valid, total_evaluations, pass_percentage, min_latency, mean_latency, median_latency, max_latency])  
+            data.append([pivot, passed, failed, non_function_response, incorrect_but_valid, total_evaluations, pass_percentage, min_latency, mean_latency, median_latency, max_latency])  
 
     print(tabulate(data, headers=headers))
 

@@ -6,13 +6,13 @@ class Text:
     ]
 
     messages = [
-        "I'm late for dinner",
-        "I'm running late",
-        "I'll be there soon",
-        "I'm on my way",
-        "I'm stuck in traffic",
-        "I'm almost there",
-        "I'm running behind"
+        "I am running late for dinner",
+        "I am running late",
+        "I will be there soon",
+        "I am on my way",
+        "I am stuck in traffic",
+        "I am almost there",
+        "I am running behind"
     ]
 
     templates = [
