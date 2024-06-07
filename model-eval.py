@@ -2,6 +2,7 @@ import json
 import random
 
 from backends.ollama_direct import OllamaDirect
+from backends.transformers_guidance import TransformersGuidance
 
 from evaluator import evaluate_with_ollama, print_results
 
@@ -16,22 +17,24 @@ from functions.text import Text
 from functions.tune_radio import TuneRadio
 from functions.volume_control import VolumeControl
 
-functions = [Call(), FanControl(), GetCarTemperatureSetpoint(), LockDoors(), Navigate(), SetCarTemperatureSetpoint(), Text(), TuneRadio(), VolumeControl(), PassToCloud()]
+functions = [Call(), FanControl(), GetCarTemperatureSetpoint(), LockDoors(), Navigate(), SetCarTemperatureSetpoint(), Text(), TuneRadio(), VolumeControl()]
 backends = [
 #    OllamaDirect("phi3:14b-medium-4k-instruct-q4_0", functions),
-    OllamaDirect("phi3:3.8b-mini-instruct-4k-q4_K_M", functions),
+#    OllamaDirect("phi3:3.8b-mini-instruct-4k-q4_K_M", functions),
+    TransformersGuidance(model_repo="microsoft/Phi-3-mini-4k-instruct", functions=functions),
+
 #    OllamaDirect("wizardlm2:7b-q4_0", functions),
 #    OllamaDirect("llama3:8b-instruct-q4_0", functions),
 #    OllamaLangchain("phi3:14b-medium-128k-instruct-q4_0", functions),
 ]
  
-reproducability_seed = random.randint(1, 100000)
-print(f"reproducability seed: {reproducability_seed}")
+seed = random.randint(1, 100000)
+print(f"reproducability seed: {seed}")
 print()
 
-random.seed(reproducability_seed)
+random.seed(seed)
 
-evaluations_per_function = 200
+evaluations_per_function = 1
 scenarios = []
 for function in functions:
     for i in range(evaluations_per_function):
