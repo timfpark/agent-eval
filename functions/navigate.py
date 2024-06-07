@@ -31,7 +31,7 @@ class Navigate:
             "user_input": template.format(place),
             "expected": {
                 "function": self.get_name(),
-                "arguments": {
+                "parameters": {
                     "place": place,
                 }
             }
@@ -43,7 +43,7 @@ class Navigate:
 
         return self.generate_scenario(template, place)
     
-    def are_valid_arguments(self, arguments):
-        return isinstance(arguments, dict) and "place" in arguments
+    def are_valid_parameters(self, parameters):
+        return isinstance(parameters, dict) and "place" in parameters
         
         

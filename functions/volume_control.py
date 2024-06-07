@@ -8,7 +8,7 @@ class VolumeControl:
             "user_input": "Increase volume",
             "expected": {
                 "function": "volume_control",
-                "arguments": {
+                "parameters": {
                     "action": "increase",
                 }
             }
@@ -18,7 +18,7 @@ class VolumeControl:
             "user_input": "Decrease volume",
             "expected": {
                 "function": "volume_control",
-                "arguments": {
+                "parameters": {
                     "action": "decrease",
                 }
             }
@@ -28,7 +28,7 @@ class VolumeControl:
             "user_input": "Mute audio",
             "expected": {
                 "function": "volume_control",
-                "arguments": {
+                "parameters": {
                     "action": "mute",
                 }
             }
@@ -58,5 +58,5 @@ class VolumeControl:
     def generate_random_scenario(self):
         return random.choice(self.scenarios)
     
-    def are_valid_arguments(self, arguments):
-        return isinstance(arguments, dict) and "change" in arguments 
+    def are_valid_parameters(self, parameters):
+        return isinstance(parameters, dict) and "change" in parameters 

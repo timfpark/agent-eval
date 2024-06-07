@@ -13,7 +13,7 @@ class Call:
         return "call"
 
     def get_definition(self):
-        return  {    
+        return  {
             "name": self.get_name(),
             "description": "Make phone call to the specified named contact",
             "parameters": [
@@ -32,7 +32,7 @@ class Call:
             "user_input": template.format(name),
             "expected": {
                 "function": self.get_name(),
-                "arguments": {
+                "parameters": {
                     "name": name,
                 }
             }
@@ -44,7 +44,7 @@ class Call:
 
         return self.generate_scenario(template, name)
     
-    def are_valid_arguments(self, arguments):
-        return isinstance(arguments, dict) and "name" in arguments
+    def are_valid_parameters(self, parameters):
+        return isinstance(parameters, dict) and "name" in parameters
         
         

@@ -63,7 +63,7 @@ class SetCarTemperatureSetpoint:
             "user_input": template.format(temperature),
             "expected": {
                 "function": self.get_name(),
-                "arguments": {
+                "parameters": {
                     "temperature": temperature,
                 }
             }
@@ -75,7 +75,7 @@ class SetCarTemperatureSetpoint:
 
         return self.generate_scenario(template, temperature)
     
-    def are_valid_arguments(self, arguments):
-        return isinstance(arguments, dict) and "temperature" in arguments
+    def are_valid_parameters(self, parameters):
+        return isinstance(parameters, dict) and "temperature" in parameters
         
         

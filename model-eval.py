@@ -1,7 +1,7 @@
 import json
 import random
 
-from backends.ollama_langchain import OllamaLangchain
+from backends.ollama_direct import OllamaDirect
 
 from evaluator import evaluate_with_ollama, print_results
 
@@ -18,10 +18,10 @@ from functions.volume_control import VolumeControl
 
 functions = [Call(), FanControl(), GetCarTemperatureSetpoint(), LockDoors(), Navigate(), SetCarTemperatureSetpoint(), Text(), TuneRadio(), VolumeControl(), PassToCloud()]
 backends = [
-    OllamaLangchain("phi3:14b-medium-4k-instruct-q4_0", functions),
-    OllamaLangchain("phi3:3.8b-mini-instruct-4k-q4_K_M", functions),
-    OllamaLangchain("wizardlm2:7b-q4_0", functions),
-    OllamaLangchain("llama3:8b-instruct-q4_0", functions),
+#    OllamaDirect("phi3:14b-medium-4k-instruct-q4_0", functions),
+    OllamaDirect("phi3:3.8b-mini-instruct-4k-q4_K_M", functions),
+#    OllamaDirect("wizardlm2:7b-q4_0", functions),
+#    OllamaDirect("llama3:8b-instruct-q4_0", functions),
 #    OllamaLangchain("phi3:14b-medium-128k-instruct-q4_0", functions),
 ]
  

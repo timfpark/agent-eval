@@ -8,7 +8,7 @@ class FanControl:
             "user_input": "Increase the fan",
             "expected": {
                 "function": "fan_control",
-                "arguments": {
+                "parameters": {
                     "action": "increase",
                 }
             }
@@ -18,7 +18,7 @@ class FanControl:
             "user_input": "Decrease fan speed",
             "expected": {
                 "function": "fan_control",
-                "arguments": {
+                "parameters": {
                     "action": "decrease",
                 }
             }
@@ -28,7 +28,7 @@ class FanControl:
             "user_input": "Turn off fan",
             "expected": {
                 "function": "fan_control",
-                "arguments": {
+                "parameters": {
                     "action": "off",
                 }
             }
@@ -38,7 +38,7 @@ class FanControl:
             "user_input": "Turn the fan up a bit",
             "expected": {
                 "function": "fan_control",
-                "arguments": {
+                "parameters": {
                     "action": "increase",
                 }
             }
@@ -68,5 +68,5 @@ class FanControl:
     def generate_random_scenario(self):
         return random.choice(self.scenarios)
     
-    def are_valid_arguments(self, arguments):
-        return isinstance(arguments, dict) and "action" in arguments 
+    def are_valid_parameters(self, parameters):
+        return isinstance(parameters, dict) and "action" in parameters 

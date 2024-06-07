@@ -1,5 +1,4 @@
 from fuzzywuzzy import fuzz
-from langchain_experimental.llms.ollama_functions import OllamaFunctions
 
 import json
 import statistics
@@ -22,13 +21,13 @@ def fuzzy_dict_equal(dict1, dict2):
             return False
     return True
 
-def parse_arguments(arguments):
-    if isinstance(arguments, str):
-        if arguments == '':
-            arguments = '{}'
-        arguments = json.loads(arguments)
+def parse_parameters(parameters):
+    if isinstance(parameters, str):
+        if parameters == '':
+            parameters = '{}'
+        parameters = json.loads(parameters)
 
-    return arguments
+    return parameters
 
 class Evaluator:
     def __init__(self, backend, functions, scenarios):
@@ -53,7 +52,9 @@ class Evaluator:
         expected = scenario["expected"]
         user_input = scenario["user_input"]
 
-        expected_arguments = expected["arguments"]
+        print()
+        print(f"expected: {expected}")
+        expected_parameters = expected["parameters"]
         expected_function = expected["function"]
 
         start_time = time.time()
@@ -79,25 +80,25 @@ class Evaluator:
         latency_ms = (end_time - start_time) * 1000.0
         self.results[function_name]["latencies"].append(latency_ms)
 
-        response["arguments"] = parse_arguments(response["arguments"])
+        response["parameters"] = parse_parameters(response["parameters"])
 
         if response["function"] == expected_function:
-            if not isinstance(expected_arguments, dict):
-                print(f"*** expected_arguments is not dict: {expected_arguments}")
-                expected_arguments = json.loads(expected_arguments)
+            if not isinstance(expected_parameters, dict):
+                print(f"*** expected_parameters is not dict: {expected_parameters}")
+                expected_parameters = json.loads(expected_parameters)
                 
-            if fuzzy_dict_equal(expected_arguments, response["arguments"]):
+            if fuzzy_dict_equal(expected_parameters, response["parameters"]):
                 self.results[function_name]["passed"] += 1
             else:
-                print(f"arguments failed: {response["arguments"]} vs. expected {expected_arguments} for prompt '{user_input}'")
+                print(f"parameters failed: {response["parameters"]} vs. expected {expected_parameters} for prompt '{user_input}'")
         else:
             print(f"function selection failed: '{response["function"]}' vs. expected '{expected_function}' for prompt '{user_input}'")
 
             self.results[function_name]["failed"] += 1
 
             for function in self.functions:
-                if function.get_name() == response["function"] and function.are_valid_arguments(response["arguments"]):
-                    print(f"incorrect but valid function call returned to: {function.get_name()} with arguments: {response["arguments"]}")
+                if function.get_name() == response["function"] and function.are_valid_parameters(response["parameters"]):
+                    print(f"incorrect but valid function call returned to: {function.get_name()} with parameters: {response["parameters"]}")
                     self.results[function_name]["incorrect_but_valid"] += 1
                     break
 

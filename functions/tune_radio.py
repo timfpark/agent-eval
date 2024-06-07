@@ -41,7 +41,7 @@ class TuneRadio:
             "user_input": template.format(station),
             "expected": {
                 "function": self.get_name(),
-                "arguments": {
+                "parameters": {
                     "station": station,
                 }
             }
@@ -53,5 +53,5 @@ class TuneRadio:
 
         return self.generate_scenario(template, station)
     
-    def are_valid_arguments(self, arguments):
-        return isinstance(arguments, dict) and "station" in arguments 
+    def are_valid_parameters(self, parameters):
+        return isinstance(parameters, dict) and "station" in parameters 

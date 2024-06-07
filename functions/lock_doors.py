@@ -41,7 +41,7 @@ class LockDoors:
             "user_input": template.format(lock),
             "expected": {
                 "function": self.get_name(),
-                "arguments": {
+                "parameters": {
                     "lock": lock == "lock",
                 }
             }
@@ -53,5 +53,5 @@ class LockDoors:
 
         return self.generate_scenario(template, lock)
     
-    def are_valid_arguments(self, arguments):
-        return isinstance(arguments, dict) and "lock" in arguments
+    def are_valid_parameters(self, parameters):
+        return isinstance(parameters, dict) and "lock" in parameters

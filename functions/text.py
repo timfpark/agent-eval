@@ -46,7 +46,7 @@ class Text:
             "user_input": template.format(name, message),
             "expected": {
                 "function": self.get_name(),
-                "arguments": {
+                "parameters": {
                     "name": name,
                     "message": message
                 }
@@ -60,7 +60,7 @@ class Text:
 
         return self.generate_scenario(template, name, message)
     
-    def are_valid_arguments(self, arguments):
-        return isinstance(arguments, dict) and "name" in arguments and "message" in arguments
+    def are_valid_parameters(self, parameters):
+        return isinstance(parameters, dict) and "name" in parameters and "message" in parameters
         
         

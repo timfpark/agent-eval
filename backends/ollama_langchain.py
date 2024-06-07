@@ -8,7 +8,7 @@ class OllamaLangchain:
             model=model_tag, 
             keep_alive=-1,
             format="json",
-            base_url="http://localhost:11434",
+            base_url="http://localhost:9090",
         )
 
         self.model = model.bind_tools(
@@ -25,5 +25,5 @@ class OllamaLangchain:
 
         return {
             "function": function_call_response["name"],
-            "arguments": function_call_response["arguments"]
+            "parameters": function_call_response["arguments"]
         }

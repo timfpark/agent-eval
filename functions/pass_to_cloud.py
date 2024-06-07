@@ -31,7 +31,7 @@ class PassToCloud:
             "user_input": template,
             "expected": {
                 "function": self.get_name(),
-                "arguments": {}
+                "parameters": {}
             }
         }
     
@@ -40,5 +40,5 @@ class PassToCloud:
 
         return self.generate_scenario(template)
     
-    def are_valid_arguments(self, arguments):
-        return isinstance(arguments, dict) and len(arguments) == 0
+    def are_valid_parameters(self, parameters):
+        return isinstance(parameters, dict) and len(parameters) == 0
