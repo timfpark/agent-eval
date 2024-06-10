@@ -1,4 +1,5 @@
 import random
+from guidance import gen 
 
 class GetCarTemperatureSetpoint:
     templates = [
@@ -27,18 +28,17 @@ class GetCarTemperatureSetpoint:
     def get_definition(self):
         return {    
             "name": self.get_name(),
-            "description": "Get the current set point temperature for the vehicle's interior",
+            "description": "Get the current set point temperature",
             "parameters": [],
-            "required": [],
-            "returns": [
-                {
-                    "name": "temperature",
-                    "type": "float",
-                }
-            ]
         }
     
-    def generate_scenario(self, template):
+    def generate_parameters(self, llm):
+        llm = llm + '{"temperature":' + gen(regex='[+-]?([0-9]*[.])?[0-9]+', name="temperature") + '}'
+
+        return { "temperature": llm["temperature"] }
+
+    
+    def build_scenario(self, template):
         return {
             "function": self.get_name(),
             "user_input": template,
@@ -48,10 +48,10 @@ class GetCarTemperatureSetpoint:
             }
         } 
 
-    def generate_random_scenario(self):
+    def build_random_scenario(self):
         template = random.choice(self.templates)
 
-        return self.generate_scenario(template)
+        return self.build_scenario(template)
     
     def are_valid_parameters(self, parameters):
         return isinstance(parameters, dict) and len(parameters) == 0

@@ -1,4 +1,5 @@
 import random
+from guidance import select 
 
 class VolumeControl:
 
@@ -41,21 +42,26 @@ class VolumeControl:
     def get_definition(self):
         return {
             "name": self.get_name(),
-            "description": "Control the volume of the car's audio system",
+            "description": "Set audio system volume",
             "parameters": {
                 "type": "object",
                 "properties": {
                     "action": {
                         "type": "string",
-                        "description": "The desired audio level action",
+                        "description": "Audio level action",
                     }
-                },
-                "required": ["action"],
-                "returns": []
+                }
             },
         }
     
-    def generate_random_scenario(self):
+    def generate_parameters(self, llm):
+        action_strings = ["increase", "decrease", "mute"]
+
+        llm = llm + '{"action":"' + select(action_strings, name="action") + '"}'
+
+        return { "action": llm["action"] }
+    
+    def build_random_scenario(self):
         return random.choice(self.scenarios)
     
     def are_valid_parameters(self, parameters):

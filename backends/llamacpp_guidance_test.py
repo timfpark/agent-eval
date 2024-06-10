@@ -6,7 +6,7 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
 sys.path.append(parent_dir)
 
-from transformers_guidance import TransformersGuidance
+from backends.llamacpp_guidance import TransformersGuidance
 
 from functions.call import Call
 from functions.fan_control import FanControl

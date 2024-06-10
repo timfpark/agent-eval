@@ -1,4 +1,5 @@
 import random
+from guidance import gen 
 
 class Text:
     names = [
@@ -35,12 +36,16 @@ class Text:
                     "name": "message",
                     "type": "string",
                 }
-            ],
-            "required": [ "name", "message" ],
-            "returns": []
+            ]
         }
     
-    def generate_scenario(self, template, name, message):
+    def generate_parameters(self, llm):
+        llm = llm + '{"name":"' + gen(name="name", stop='"') + '",'
+        llm = llm + '{"message":"' + gen(name="message", stop='"') + '"}'
+
+        return { "name": llm["name"], "message": llm["message"] }
+    
+    def build_scenario(self, template, name, message):
         return {
             "function": self.get_name(),
             "user_input": template.format(name, message),
@@ -53,12 +58,12 @@ class Text:
             }
         }
     
-    def generate_random_scenario(self):
+    def build_random_scenario(self):
         name = random.choice(self.names)
         message = random.choice(self.messages)
         template = random.choice(self.templates)
 
-        return self.generate_scenario(template, name, message)
+        return self.build_scenario(template, name, message)
     
     def are_valid_parameters(self, parameters):
         return isinstance(parameters, dict) and "name" in parameters and "message" in parameters

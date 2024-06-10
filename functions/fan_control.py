@@ -1,7 +1,7 @@
 import random
+from guidance import select 
 
 class FanControl:
-
     scenarios = [
         {
             "function": "fan_control",
@@ -35,6 +35,26 @@ class FanControl:
         },
         {
             "function": "fan_control",
+            "user_input": "Set fan to max",
+            "expected": {
+                "function": "fan_control",
+                "parameters": {
+                    "action": "max",
+                }
+            }
+        },
+        {
+            "function": "fan_control",
+            "user_input": "Set fan to full",
+            "expected": {
+                "function": "fan_control",
+                "parameters": {
+                    "action": "max",
+                }
+            }
+        },
+        {
+            "function": "fan_control",
             "user_input": "Turn the fan up a bit",
             "expected": {
                 "function": "fan_control",
@@ -51,21 +71,26 @@ class FanControl:
     def get_definition(self):
         return {
             "name": self.get_name(),
-            "description": "Control the fan level of the main heating and cooling system",
+            "description": "Set fan level",
             "parameters": {
                 "type": "object",
                 "properties": {
                     "action": {
                         "type": "string",
-                        "description": "The desired fan level action",
+                        "description": "Desired fan level action",
                     }
-                },
-                "required": ["action"],
-                "returns": []
-            },
+                }
+            }
         }
     
-    def generate_random_scenario(self):
+    def generate_parameters(self, llm):
+        action_strings = ["off", "low", "medium", "max", "increase", "decrease"]
+
+        llm = llm + '{"action":"' + select(action_strings, name="action") + '"}'
+
+        return { "action": llm["action"] }
+    
+    def build_random_scenario(self):
         return random.choice(self.scenarios)
     
     def are_valid_parameters(self, parameters):

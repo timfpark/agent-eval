@@ -60,14 +60,12 @@ class OllamaDirect:
             "stream": False
         }
 
-    def get_model_tag(self):
-        return self.model_tag
+    def get_config_tag(self):
+        return f"ollama-direct - {self.model_tag}"
 
     def execute(self, user_prompt):
         request = self.build_request(user_prompt)
         request_json = json.dumps(request)
-
-        # print(request_json)
 
         headers = {
             "Content-Type": "application/json"
@@ -77,33 +75,9 @@ class OllamaDirect:
 
         function_call_response = response.json()
 
-        print(f"function_call_response: {function_call_response}")
-
         message_content = json.loads(function_call_response["message"]["content"])
-
-        print(f"decoded function: {message_content}")
 
         return {
             "function": message_content["name"],
             "parameters": message_content["parameters"]
         }
-
-        """
-        {
-            "model": "registry.ollama.ai/library/llama3:latest",
-            "created_at": "2023-12-12T14:13:43.416799Z",
-            "message": {
-                "role": "assistant",
-                "content": "Hello! How are you today?"
-            },
-            "done": true,
-            "total_duration": 5191566416,
-            "load_duration": 2154458,
-            "prompt_eval_count": 26,
-            "prompt_eval_duration": 383809000,
-            "eval_count": 298,
-            "eval_duration": 4799921000
-        }
-        """
-
-        return response

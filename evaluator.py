@@ -40,7 +40,8 @@ class Evaluator:
         for function in functions:
             self.results[function.get_name()] = {
                 "passed": 0,
-                "failed": 0,
+                "function_incorrect": 0,
+                "parameters_incorrect": 0,
                 "non_function_response": 0,
                 "total_evaluations": 0,
                 "incorrect_but_valid": 0,
@@ -52,16 +53,15 @@ class Evaluator:
         expected = scenario["expected"]
         user_input = scenario["user_input"]
 
-        print()
-        print(f"expected: {expected}")
         expected_parameters = expected["parameters"]
         expected_function = expected["function"]
 
         start_time = time.time()
 
         self.results[function_name]["total_evaluations"] += 1
-        
+
         try:
+            print(f"evaluating user prompt: '{user_input}'")
             response = self.backend.execute(user_input)
         except Exception as e:
             self.results[function_name]["non_function_response"] += 1
@@ -71,9 +71,10 @@ class Evaluator:
             self.results[function_name]["latencies"].append(latency_ms)
 
             print(f"failed to invoke model with user_input {user_input}")
-            # stack_trace = traceback.format_exc()
+            stack_trace = traceback.format_exc()
             print(f"exception returned: {e}")
-            # print(stack_trace)
+            print("stack trace:")
+            print(stack_trace)
             return "(n/a) "
 
         end_time = time.time()
@@ -81,6 +82,9 @@ class Evaluator:
         self.results[function_name]["latencies"].append(latency_ms)
 
         response["parameters"] = parse_parameters(response["parameters"])
+
+        print(f"function generated: {response["function"]} vs. expected: {expected_function}")
+        print(f"parameters generated: {response["parameters"]} vs. expected: {expected_parameters}")
 
         if response["function"] == expected_function:
             if not isinstance(expected_parameters, dict):
@@ -90,11 +94,12 @@ class Evaluator:
             if fuzzy_dict_equal(expected_parameters, response["parameters"]):
                 self.results[function_name]["passed"] += 1
             else:
-                print(f"parameters failed: {response["parameters"]} vs. expected {expected_parameters} for prompt '{user_input}'")
+                print(f"#################### parameters failed: {response["parameters"]} vs. expected {expected_parameters} for prompt '{user_input}'")
+                self.results[function_name]["parameters_incorrect"] += 1
         else:
             print(f"function selection failed: '{response["function"]}' vs. expected '{expected_function}' for prompt '{user_input}'")
 
-            self.results[function_name]["failed"] += 1
+            self.results[function_name]["function_incorrect"] += 1
 
             for function in self.functions:
                 if function.get_name() == response["function"] and function.are_valid_parameters(response["parameters"]):
@@ -141,14 +146,15 @@ class Evaluator:
         return self.results
 
 def print_results(results):
-    headers = ["functions", "passed", "failed", "nfr", "i(bvfc)", "total", "%", "min (ms)", "mean (ms)", "median (ms)", "max (ms)"]
+    headers = ["functions", "passed", "fi", "pi", "nfr", "i(bvfc)", "total", "%", "min (ms)", "mean (ms)", "median (ms)", "max (ms)"]
 
     data = []
     for pivot in results:
         pivot_results = results[pivot]
         if pivot_results["total_evaluations"] > 0:
             passed = pivot_results["passed"]
-            failed = pivot_results["failed"]
+            function_incorrect = pivot_results["function_incorrect"]
+            parameters_incorrect = pivot_results["parameters_incorrect"]
             non_function_response = pivot_results["non_function_response"]
             total_evaluations = pivot_results["total_evaluations"]
             incorrect_but_valid = pivot_results["incorrect_but_valid"]
@@ -159,15 +165,6 @@ def print_results(results):
             mean_latency = pivot_results["mean_latency"]
             median_latency = pivot_results["median_latency"]
 
-            data.append([pivot, passed, failed, non_function_response, incorrect_but_valid, total_evaluations, pass_percentage, min_latency, mean_latency, median_latency, max_latency])  
+            data.append([pivot, passed, function_incorrect, parameters_incorrect, non_function_response, incorrect_but_valid, total_evaluations, pass_percentage, min_latency, mean_latency, median_latency, max_latency])  
 
     print(tabulate(data, headers=headers))
-
-def evaluate_with_ollama(backend, functions, scenarios):
-    evaluator = Evaluator(
-        backend=backend,
-        functions=functions,
-        scenarios=scenarios
-    )
-
-    return evaluator.evaluate()

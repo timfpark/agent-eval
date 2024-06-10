@@ -1,4 +1,5 @@
 import random
+from guidance import select
 
 class LockDoors:
     lock_states = [
@@ -28,14 +29,18 @@ class LockDoors:
                 "properties": {
                     "lock": {
                         "type": "boolean",
-                        "description": "True if the doors should be locked, False if they should be unlocked",
+                        "description": "Boolean that describes if doors should be locked",
                     }
                 },
-                "required": ["lock"],
             },
         }
     
-    def generate_scenario(self, template, lock):
+    def generate_parameters(self, llm):
+        llm = llm + '{"lock":' + select(["true","false"], name="lock") + '}'
+
+        return { "lock": llm["lock"] == "true" }
+
+    def build_scenario(self, template, lock):
         return {
             "function": self.get_name(),
             "user_input": template.format(lock),
@@ -47,11 +52,11 @@ class LockDoors:
             }
         }
     
-    def generate_random_scenario(self):
+    def build_random_scenario(self):
         lock = random.choice(self.lock_states)
         template = random.choice(self.templates)
 
-        return self.generate_scenario(template, lock)
+        return self.build_scenario(template, lock)
     
     def are_valid_parameters(self, parameters):
         return isinstance(parameters, dict) and "lock" in parameters

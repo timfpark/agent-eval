@@ -1,4 +1,5 @@
 import random
+from guidance import gen 
 
 class SetCarTemperatureSetpoint:
     temperatures = [
@@ -41,15 +42,8 @@ class SetCarTemperatureSetpoint:
     def get_definition(self):
         return  {    
             "name": self.get_name(),
-            "description": "Sets the desired temperature set point for the car's interior",
+            "description": "Sets the desired temperature set point",
             "parameters": [
-                {
-                    "name": "temperature",
-                    "type": "float",
-                }
-            ],
-            "required": [ "temperature" ],
-            "returns": [
                 {
                     "name": "temperature",
                     "type": "float",
@@ -57,7 +51,19 @@ class SetCarTemperatureSetpoint:
             ]
         }
     
-    def generate_scenario(self, template, temperature):
+    def generate_parameters(self, llm):
+        llm = llm + '{"temperature":' + gen(regex='([0-9]*[.])?[0-9]+', name="temperature") + '}'
+
+        temperature_generated = llm["temperature"]
+
+        # TODO: Debug why somehow we are still generating a leading ":" with llamacpp?
+        if temperature_generated.startswith(':'):
+            temperature_generated = temperature_generated[1:]
+
+        return { "temperature": float(temperature_generated) }
+
+    
+    def build_scenario(self, template, temperature):
         return {
             "function": self.get_name(),
             "user_input": template.format(temperature),
@@ -69,11 +75,11 @@ class SetCarTemperatureSetpoint:
             }
         }
     
-    def generate_random_scenario(self):
+    def build_random_scenario(self):
         temperature = random.choice(self.temperatures)
         template = random.choice(self.templates)
 
-        return self.generate_scenario(template, temperature)
+        return self.build_scenario(template, temperature)
     
     def are_valid_parameters(self, parameters):
         return isinstance(parameters, dict) and "temperature" in parameters

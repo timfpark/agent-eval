@@ -1,4 +1,5 @@
 import random
+from guidance import gen 
 
 class TuneRadio:
     stations = [
@@ -21,21 +22,24 @@ class TuneRadio:
     def get_definition(self):
         return {
             "name": self.get_name(),
-            "description": "Change the station the car's radio is tuned to",
+            "description": "Change the radio station",
             "parameters": {
                 "type": "object",
                 "properties": {
                     "station": {
                         "type": "string",
-                        "description": "The desired radio station to tune",
+                        "description": "Desired radio station",
                     }
-                },
-                "required": ["station"],
-                "returns": []
+                }
             },
         }
     
-    def generate_scenario(self, template, station):
+    def generate_parameters(self, llm):
+        llm = llm + '{"station":"' + gen(name="station", stop='"') + '"}'
+
+        return { "station": llm["station"] }
+    
+    def build_scenario(self, template, station):
         return {
             "function": self.get_name(),
             "user_input": template.format(station),
@@ -47,11 +51,11 @@ class TuneRadio:
             }
         }
     
-    def generate_random_scenario(self):
+    def build_random_scenario(self):
         station = random.choice(self.stations)
         template = random.choice(self.templates)
 
-        return self.generate_scenario(template, station)
+        return self.build_scenario(template, station)
     
     def are_valid_parameters(self, parameters):
         return isinstance(parameters, dict) and "station" in parameters 
