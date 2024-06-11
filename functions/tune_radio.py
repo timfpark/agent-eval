@@ -23,9 +23,12 @@ class TuneRadio:
         return  {    
             "name": self.get_name(),
             "description": "Change the radio station",
-            "parameters": {
-                "station": "radio station",                
-            }
+            "parameters": [
+                {
+                    "name": "station",
+                    "type": "string",
+                }
+            ]
         }
     
     def generate_parameters(self, llm):

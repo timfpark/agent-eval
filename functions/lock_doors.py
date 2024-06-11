@@ -24,9 +24,13 @@ class LockDoors:
         return  {
             "name": self.get_name(),
             "description": "Lock or unlock car doors",
-            "parameters": { 
-                "action": "lock or unlock door"
-            }
+            "parameters": [
+                {
+                    "name": "lock",
+                    "type": "string",
+                    "allowed_values": ["lock", "unlock"]
+                }
+            ]
         }
     
     def generate_parameters(self, llm):

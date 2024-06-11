@@ -2,7 +2,7 @@ import random
 from guidance import gen 
 
 class Navigate:
-    places = [
+    destinations = [
         "Home", 
         "323 Rio Del Mar Blvd", 
         "Amsterdam", 
@@ -24,36 +24,39 @@ class Navigate:
     def get_definition(self):
         return  {    
             "name": self.get_name(),
-            "description": "Navigate car",
-            "parameters": {
-                "place": "navigation destination"
-            }
+            "description": "Navigate",
+            "parameters": [
+                {
+                    "name": "destination",
+                    "type": "string",
+                }
+            ]
         }
     
     def generate_parameters(self, llm):
-        llm = llm + '{"place":"' + gen(name="place", stop='"') + '"}'
+        llm = llm + '{"destination":"' + gen(name="destination", stop='"') + '"}'
 
-        return { "place": llm["place"] }
+        return { "destination": llm["destination"] }
     
-    def build_scenario(self, template, place):
+    def build_scenario(self, template, destination):
         return {
             "function": self.get_name(),
-            "user_input": template.format(place),
+            "user_input": template.format(destination),
             "expected": {
                 "function": self.get_name(),
                 "parameters": {
-                    "place": place,
+                    "destination": destination,
                 }
             }
         }
     
     def build_random_scenario(self):
-        place = random.choice(self.places)
+        destination = random.choice(self.destinations)
         template = random.choice(self.templates)
 
-        return self.build_scenario(template, place)
+        return self.build_scenario(template, destination)
     
     def are_valid_parameters(self, parameters):
-        return isinstance(parameters, dict) and "place" in parameters
+        return isinstance(parameters, dict) and "destination" in parameters
         
         

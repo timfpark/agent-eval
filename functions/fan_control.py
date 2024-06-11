@@ -14,6 +14,8 @@ def build_scenario(user_input, level):
     }
 
 class FanControl:
+    allowed_values = ["off", "low", "medium", "max", "increase", "decrease"]
+
     scenarios = [
         build_scenario("Increase the fan please", "increase"),
         build_scenario("Decrease fan speed", "decrease"),
@@ -30,15 +32,17 @@ class FanControl:
         return  {
             "name": self.get_name(),
             "description": "Set fan level",
-            "parameters": { 
-                "level": "new fan level or action"
-            }
+            "parameters": [
+                {
+                    "name": "level",
+                    "type": "string",
+                    "allowed_values":  self.allowed_values
+                }
+            ]
         }
     
     def generate_parameters(self, llm):
-        action_strings = ["off", "low", "medium", "max", "increase", "decrease"]
-
-        llm = llm + '{"level":"' + select(action_strings, name="level") + '"}'
+        llm = llm + '{"level":"' + select(self.allowed_values, name="level") + '"}'
 
         return { "level": llm["level"] }
     

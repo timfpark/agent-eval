@@ -46,10 +46,16 @@ class Text:
         return  {    
             "name": self.get_name(),
             "description": "Send text message to the specified contact",
-            "parameters": {
-                "name": "name to send text to",
-                "message": "message to send"                
-            }
+            "parameters": [
+                {
+                    "name": "name",
+                    "type": "string",
+                },
+                {
+                    "name": "message",
+                    "type": "string",
+                }
+            ]
         }
     
     def generate_parameters(self, llm):

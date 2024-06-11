@@ -14,6 +14,7 @@ def build_scenario(user_input, volume):
     }
 
 class VolumeControl:
+    allowed_volume_values =  ["increase", "decrease", "mute", "15", "30", "45"]
 
     scenarios = [
         build_scenario("Set volume to 45", "45"),
@@ -33,15 +34,17 @@ class VolumeControl:
         return  {    
             "name": self.get_name(),
             "description": "Set audio volume",
-            "parameters": {
-                "volume": "volume level or action",                
-            }
+            "parameters": [
+                {
+                    "name": "volume",
+                    "type": "string",
+                    "allowed_values": self.allowed_volume_values
+                }
+            ]
         }
 
     def generate_parameters(self, llm):
-        action_strings = ["increase", "decrease", "mute", "15", "30", "45"]
-
-        llm = llm + '{"volume":"' + select(action_strings, name="volume") + '"}'
+        llm = llm + '{"volume":"' + select(self.allowed_volume_values, name="volume") + '"}'
 
         return { "volume": llm["volume"] }
     

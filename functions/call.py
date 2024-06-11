@@ -36,9 +36,12 @@ class Call:
         return  {
             "name": self.get_name(),
             "description": "Make phone call",
-            "parameters":  {
-                "name": "contact name"
-            }
+            "parameters":  [
+                {
+                    "name": "name",
+                    "type": "string",
+                }
+            ]
         }
     
     def generate_parameters(self, llm):

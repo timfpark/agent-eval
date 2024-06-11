@@ -1,19 +1,18 @@
 import sys
 import os
 
-# Get the current file's directory
 current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
 sys.path.append(parent_dir)
 
-from ollama_direct import OllamaDirect
+from backends.llamacpp_direct import LlamaCppDirect
 
 from functions.call import Call
 from functions.fan_control import FanControl
 
-def test_ollama_direct():
+def test_llamacpp_direct():
     functions = [Call(), FanControl()]
-    backend = OllamaDirect(model_nickname="phi3-mini-4k-instruct", model_tag="phi3:3.8b-mini-instruct-4k-q4_K_M", functions=functions)
+    backend = LlamaCppDirect(model_nickname="phi3-mini-4k-instruct", model_path="./Phi-3-mini-4k-instruct-q4.gguf", functions=functions)
 
     user_prompt = "Please call Ron"
 

@@ -30,7 +30,8 @@ class OllamaDirect:
         "stream": False
     }
     
-    def __init__(self, model_tag, functions):
+    def __init__(self, model_nickname, model_tag, functions):
+        self.model_nickname = model_nickname
         self.model_tag = model_tag
         self.functions = functions
 
@@ -61,7 +62,7 @@ class OllamaDirect:
         }
 
     def get_config_tag(self):
-        return f"ollama-direct - {self.model_tag}"
+        return f"ollama-direct:{self.model_nickname}"
 
     def execute(self, user_prompt):
         request = self.build_request(user_prompt)
