@@ -19,10 +19,10 @@ from functions.volume_control import VolumeControl
 
 functions = [Call(), FanControl(), GetCarTemperatureSetpoint(), LockDoors(), Navigate(), SetCarTemperatureSetpoint(), Text(), TuneRadio(), VolumeControl()]
 backends = [
-    LlamaCppDirect(model_nickname="phi3-mini-4k-instruct-q4", model_path="./Phi-3-mini-4k-instruct-q4.gguf", functions=functions),
     LlamaCppGuidance(model_nickname="phi3-mini-4k-instruct-q4", model_path="./Phi-3-mini-4k-instruct-q4.gguf", functions=functions),
-    LlamaCppGuidance(model_nickname="llama3-8b-instruct-q4", model_path="./Meta-Llama-3-8B-Instruct.Q4_0.gguf", functions=functions),
     LlamaCppGuidance(model_nickname="phi3-medium-4k-instruct-q4", model_path="./Phi-3-medium-4k-instruct-Q4_K_M.gguf", functions=functions),
+    LlamaCppGuidance(model_nickname="llama3-8b-instruct-q4", model_path="./Meta-Llama-3-8B-Instruct.Q4_0.gguf", functions=functions),
+    LlamaCppDirect(model_nickname="phi3-mini-4k-instruct-q4", model_path="./Phi-3-mini-4k-instruct-q4.gguf", functions=functions),
     OllamaDirect(model_nickname="phi3-mini-4k-instruct-q4", model_tag="phi3:3.8b-mini-instruct-4k-q4_K_M", functions=functions),
 ]
  
@@ -33,7 +33,7 @@ print()
 
 random.seed(seed)
 
-evaluations_per_function = 1
+evaluations_per_function = 200
 scenarios = []
 for function in functions:
     for i in range(evaluations_per_function):
@@ -43,7 +43,6 @@ random.shuffle(scenarios)
 
 config_results = {}
 for backend in backends:
-    print(f"evaluating config: {backend.get_config_tag()}")
     evaluator = Evaluator(
         backend=backend,
         functions=functions,
@@ -63,10 +62,7 @@ print('dumping results to file')
 with open('results/model-eval-amd-7950x3d-rtx4080.json', 'w') as file:
     json.dump(config_results, file)
 
-print("done")
-
 # TODO
-# Capture errors for analysis and expose in notebook
 # Simplify tool definitions if using guidance (don't need parameter definitions since we drive that directly in code?)
 # How can we more rigorously capture memory utilization (both CPU and GPU)?
 # Expand response to allow for returning multiple functions

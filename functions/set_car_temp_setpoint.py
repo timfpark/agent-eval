@@ -43,7 +43,7 @@ class SetCarTemperatureSetpoint:
     def get_definition(self):
         return  {    
             "name": self.get_name(),
-            "description": "Sets the desired temperature set point",
+            "description": "Set the desired temperature",
             "parameters": [
                 {
                     "name": "temperature",

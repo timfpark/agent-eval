@@ -45,7 +45,8 @@ class Evaluator:
                 "non_function_response": 0,
                 "total_evaluations": 0,
                 "incorrect_but_valid": 0,
-                "latencies": []
+                "latencies": [],
+                "errors": []
             }
 
     def evaluate_scenario(self, scenario):
@@ -88,18 +89,33 @@ class Evaluator:
 
         if response["function"] == expected_function:
             if not isinstance(expected_parameters, dict):
-                print(f"++++++++++ expected_parameters is not dict: {expected_parameters}")
                 expected_parameters = json.loads(expected_parameters)
                 
             if fuzzy_dict_equal(expected_parameters, response["parameters"]):
                 self.results[function_name]["passed"] += 1
             else:
-                print(f"++++++++++ parameters failed: {response["parameters"]} vs. expected {expected_parameters} for prompt '{user_input}'")
+                print(f"PARAMETER GENERATION FAILED: {response["parameters"]} vs. expected {expected_parameters} for prompt '{user_input}'")
+
+                self.results[function_name]["errors"].append({
+                    "user_input": user_input,
+                    "expected_function": expected_function,
+                    "generated_function": response["function"],
+                    "expected_parameters": expected_parameters,
+                    "generated_parameters": response["parameters"]
+                })
+
                 self.results[function_name]["parameters_incorrect"] += 1
         else:
-            print(f"+++++++++++ function selection failed: '{response["function"]}' vs. expected '{expected_function}' for prompt '{user_input}'")
+            print(f"FUNCTION GENERATION FAILED: '{response["function"]}' vs. expected '{expected_function}' for prompt '{user_input}'")
 
             self.results[function_name]["function_incorrect"] += 1
+            self.results[function_name]["errors"].append({
+                "user_input": user_input,
+                "expected_function": expected_function,
+                "generated_function": response["function"],
+                "expected_parameters": expected_parameters,
+                "generated_parameters": response["parameters"]
+            })
 
             for function in self.functions:
                 if function.get_name() == response["function"] and function.are_valid_parameters(response["parameters"]):
@@ -123,7 +139,8 @@ class Evaluator:
         for scenario in self.scenarios:
             count += 1
             latency = self.evaluate_scenario(scenario)
-            print(f"{count} of {len(self.scenarios)}: {latency}ms")
+            config_tag = self.backend.get_config_tag()
+            print(f"{config_tag}: {count} of {len(self.scenarios)}: {latency}ms")
 
         for function in self.functions:
             function_name = function.get_name()

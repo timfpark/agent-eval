@@ -48,8 +48,6 @@ class GetCarTemperatureSetpoint:
     def build_random_scenario(self):
         template = random.choice(self.templates)
 
-        print(template)
-
         return self.build_scenario(template)
     
     def are_valid_parameters(self, parameters):
