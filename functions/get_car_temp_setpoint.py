@@ -29,15 +29,12 @@ class GetCarTemperatureSetpoint:
         return {    
             "name": self.get_name(),
             "description": "Get the current set point temperature",
-            "parameters": [],
+            "parameters": {},
         }
     
     def generate_parameters(self, llm):
-        llm = llm + '{"temperature":' + gen(regex='[+-]?([0-9]*[.])?[0-9]+', name="temperature") + '}'
+        return {}
 
-        return { "temperature": llm["temperature"] }
-
-    
     def build_scenario(self, template):
         return {
             "function": self.get_name(),

@@ -3,7 +3,16 @@ from guidance import gen
 
 class Navigate:
     places = [
-        "Home", "323 Rio Del Mar Blvd", "Amsterdam", "Decatur", "Downtown", "Work", "nearest gas station", "SFO", "nearest ATM" ]
+        "Home", 
+        "323 Rio Del Mar Blvd", 
+        "Amsterdam", 
+        "Decatur", 
+        "Downtown", 
+        "Work", 
+        "the nearest gas station", 
+        "SFO", 
+        "the nearest ATM" 
+    ]
 
     templates = [
         "Navigate me to {}",
@@ -15,13 +24,10 @@ class Navigate:
     def get_definition(self):
         return  {    
             "name": self.get_name(),
-            "description": "Navigate to named place",
-            "parameters": [
-                {
-                    "name": "place",
-                    "type": "string",
-                }
-            ]
+            "description": "Navigate car",
+            "parameters": {
+                "place": "navigation destination"
+            }
         }
     
     def generate_parameters(self, llm):

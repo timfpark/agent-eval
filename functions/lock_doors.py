@@ -21,24 +21,18 @@ class LockDoors:
         return "lock_doors"
 
     def get_definition(self):
-        return {
+        return  {
             "name": self.get_name(),
-            "description": "Lock or unlock the car doors",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "lock": {
-                        "type": "boolean",
-                        "description": "Boolean that describes if doors should be locked",
-                    }
-                },
-            },
+            "description": "Lock or unlock car doors",
+            "parameters": { 
+                "action": "lock or unlock door"
+            }
         }
     
     def generate_parameters(self, llm):
-        llm = llm + '{"lock":' + select(["true","false"], name="lock") + '}'
+        llm = llm + '{"lock":"' + select(self.lock_states, name="lock") + '"}'
 
-        return { "lock": llm["lock"] == "true" }
+        return { "lock": llm["lock"] }
 
     def build_scenario(self, template, lock):
         return {
@@ -47,7 +41,7 @@ class LockDoors:
             "expected": {
                 "function": self.get_name(),
                 "parameters": {
-                    "lock": lock == "lock",
+                    "lock": lock,
                 }
             }
         }

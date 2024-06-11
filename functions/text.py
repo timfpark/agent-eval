@@ -3,7 +3,26 @@ from guidance import gen
 
 class Text:
     names = [
-        "Tim Park", "Anni", "Ron Blasko", "Sue", "Tom", "Liz", "Ben", "Tia", "Joe Long", "Eva", "Christopher", "Cameron"
+        "Fiona Clarke", 
+        "Anne", 
+        "Elena Ramirez", 
+        "Elise", 
+        "Hugo", 
+        "Mira", 
+        "Ben", 
+        "Tess", 
+        "Marcus Whitmore", 
+        "Eva", 
+        "Christopher", 
+        "Cameron", 
+        "Lila", 
+        "Theo", 
+        "Maris", 
+        "Jovan", 
+        "Owen McGrath", 
+        "Nadia Petrova", 
+        "Matteo Rossi",
+        "Alejandro Fuentes"
     ]
 
     messages = [
@@ -26,17 +45,11 @@ class Text:
     def get_definition(self):
         return  {    
             "name": self.get_name(),
-            "description": "Send text message to the specified named contact",
-            "parameters": [
-                {
-                    "name": "name",
-                    "type": "string",
-                },
-                {
-                    "name": "message",
-                    "type": "string",
-                }
-            ]
+            "description": "Send text message to the specified contact",
+            "parameters": {
+                "name": "name to send text to",
+                "message": "message to send"                
+            }
         }
     
     def generate_parameters(self, llm):

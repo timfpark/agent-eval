@@ -9,7 +9,7 @@ class TuneRadio:
     templates = [
         "Can you tune the radio to {} please",
         "Change the radio to {}",
-        "Please go to {} on the radio",
+        "Please tune to {} on the radio",
         "Would you mind changing the radio station to {}, please?",
         "Could you set the radio to {} for me, please?",
         "Can you switch the radio to {}?",
@@ -20,18 +20,12 @@ class TuneRadio:
         return "tune_radio"
 
     def get_definition(self):
-        return {
+        return  {    
             "name": self.get_name(),
             "description": "Change the radio station",
             "parameters": {
-                "type": "object",
-                "properties": {
-                    "station": {
-                        "type": "string",
-                        "description": "Desired radio station",
-                    }
-                }
-            },
+                "station": "radio station",                
+            }
         }
     
     def generate_parameters(self, llm):

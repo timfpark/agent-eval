@@ -15,7 +15,7 @@ def fuzzy_dict_equal(dict1, dict2):
         val1 = dict1[key]
         val2 = dict2[key]
         if isinstance(val1, (int, float)) and isinstance(val2, (int, float)):
-            if not abs(val1 - val2) < 1e-9:  # Allows a tiny difference in floating point representations
+            if not abs(val1 - val2) < 1e-9:
                 return False
         elif fuzz.partial_ratio(str(val1).lower(), str(val2).lower()) < 98:
             return False
@@ -88,16 +88,16 @@ class Evaluator:
 
         if response["function"] == expected_function:
             if not isinstance(expected_parameters, dict):
-                print(f"*** expected_parameters is not dict: {expected_parameters}")
+                print(f"++++++++++ expected_parameters is not dict: {expected_parameters}")
                 expected_parameters = json.loads(expected_parameters)
                 
             if fuzzy_dict_equal(expected_parameters, response["parameters"]):
                 self.results[function_name]["passed"] += 1
             else:
-                print(f"#################### parameters failed: {response["parameters"]} vs. expected {expected_parameters} for prompt '{user_input}'")
+                print(f"++++++++++ parameters failed: {response["parameters"]} vs. expected {expected_parameters} for prompt '{user_input}'")
                 self.results[function_name]["parameters_incorrect"] += 1
         else:
-            print(f"function selection failed: '{response["function"]}' vs. expected '{expected_function}' for prompt '{user_input}'")
+            print(f"+++++++++++ function selection failed: '{response["function"]}' vs. expected '{expected_function}' for prompt '{user_input}'")
 
             self.results[function_name]["function_incorrect"] += 1
 

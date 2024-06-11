@@ -3,7 +3,26 @@ from guidance import gen
 
 class Call:
     names = [
-        "Tim Park", "Anni", "Ron Blasko", "Sue", "Tom", "Liz", "Ben", "Tia", "Joe Long", "Eva", "Christopher", "Cameron"
+        "Fiona Clarke", 
+        "Anne", 
+        "Elena Ramirez", 
+        "Elise", 
+        "Hugo", 
+        "Mira", 
+        "Ben", 
+        "Tess", 
+        "Marcus Whitmore", 
+        "Eva", 
+        "Christopher", 
+        "Cameron", 
+        "Lila", 
+        "Theo", 
+        "Maris", 
+        "Jovan", 
+        "Owen McGrath", 
+        "Nadia Petrova", 
+        "Matteo Rossi",
+        "Alejandro Fuentes"
     ]
 
     templates = [
@@ -16,13 +35,10 @@ class Call:
     def get_definition(self):
         return  {
             "name": self.get_name(),
-            "description": "Make phone call to the specified named contact",
-            "parameters": [
-                {
-                    "name": "name",
-                    "type": "string",
-                }
-            ]
+            "description": "Make phone call",
+            "parameters":  {
+                "name": "contact name"
+            }
         }
     
     def generate_parameters(self, llm):

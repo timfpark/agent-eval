@@ -1,4 +1,5 @@
 import random
+import re
 from guidance import gen 
 
 class SetCarTemperatureSetpoint:
@@ -56,9 +57,8 @@ class SetCarTemperatureSetpoint:
 
         temperature_generated = llm["temperature"]
 
-        # TODO: Debug why somehow we are still generating a leading ":" with llamacpp?
-        if temperature_generated.startswith(':'):
-            temperature_generated = temperature_generated[1:]
+        # TODO: Debug why guidance regex above is not supressing non-float characters
+        temperature_generated = re.sub(r'[^0-9.]', '', temperature_generated)
 
         return { "temperature": float(temperature_generated) }
 

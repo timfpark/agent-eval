@@ -7,7 +7,7 @@ request format
 
 """
 
-class TransformersGuidance:
+class LlamaCppGuidance:
     system_content_template = "You have access to the following tools:\n\n{functions_json}\n\nYou must always select one of the above tools and respond with only a JSON object matching the following schema:\n\n{\n  \"name\": <name of the selected tool>,\n  \"parameters\": <parameters for the selected tool, matching the tool's JSON schema>\n}\n"
 
     request_template = """
@@ -23,8 +23,8 @@ class TransformersGuidance:
                 "role": "assistant",
                 "content": """
 
-    def __init__(self, model_repo, functions):
-        self.model_repo = model_repo
+    def __init__(self, model_path, functions):
+        self.model_path = model_path
         self.functions = functions
         self.functions_dict = {function.get_name(): function for function in functions}
 
@@ -36,14 +36,13 @@ class TransformersGuidance:
         #    temperature=0
         # )
 
-        print("LLAMACPP REINIT ########################################################################")
-        self.model = models.LlamaCpp("./Phi-3-mini-4k-instruct-q4.gguf")
+        self.model = models.LlamaCpp(self.model_path, echo=False)
 
         with assistant():
             self.model = self.model + self.build_system_content()
 
     def get_config_tag(self):
-        return f"llamacpp-guidance - {self.model_repo}"
+        return f"llamacpp-guidance - {self.model_path}"
     
     def build_system_content(self):
         function_definitions = [function.get_definition() for function in self.functions]
