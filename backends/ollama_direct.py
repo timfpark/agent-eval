@@ -62,7 +62,7 @@ class OllamaDirect:
         }
 
     def get_config_tag(self):
-        return f"ollama-direct:{self.model_nickname}"
+        return f"{self.model_nickname}:ollama-direct"
 
     def execute(self, user_prompt):
         request = self.build_request(user_prompt)

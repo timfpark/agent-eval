@@ -43,7 +43,7 @@ class LlamaCppGuidance:
             self.model = self.model + self.build_system_content()
 
     def get_config_tag(self):
-        return f"llamacpp-guidance:{self.model_nickname}"
+        return f"{self.model_nickname}:llamacpp-guidance"
     
     def build_system_content(self):
         function_definitions = [function.get_definition() for function in self.functions]

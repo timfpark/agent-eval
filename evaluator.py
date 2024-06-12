@@ -126,10 +126,13 @@ class Evaluator:
         return latency_ms
 
     def evaluate(self):
+        config_tag = self.backend.get_config_tag()
+
         # warm up model with an unevaluated run
         if len(self.scenarios) > 0:
             try:
                 user_input = self.scenarios[0]["user_input"]
+                print(f"warming up config {config_tag}")
                 self.backend.execute(user_input)
             except Exception as e:
                 print(f"failed to invoke model with user prompt {user_input}")
@@ -139,7 +142,6 @@ class Evaluator:
         for scenario in self.scenarios:
             count += 1
             latency = self.evaluate_scenario(scenario)
-            config_tag = self.backend.get_config_tag()
             print(f"{config_tag}: {count} of {len(self.scenarios)}: {latency}ms")
 
         for function in self.functions:

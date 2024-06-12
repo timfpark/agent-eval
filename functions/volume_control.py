@@ -26,23 +26,23 @@ class VolumeControl:
         build_scenario("Set the audio to {}", "{}"),
         build_scenario("Please turn the volume to {}", "{}"),
 
-        build_scenario("Increase volume please", "increase"),
-        build_scenario("Decrease volume", "decrease"),
-        build_scenario("Please lower the volume", "decrease"),
-        build_scenario("Mute audio", "mute"),
-        build_scenario("Please turn up the volume", "increase"),
-        build_scenario("Please make it louder", "increase"),
-        build_scenario("Turn the volume up, please.", "increase"),
-        build_scenario("Can you decrease the volume?", "decrease"),
-        build_scenario("Mute the audio", "mute"),
-        build_scenario("Can you mute?", "mute"),
-        build_scenario("Please mute", "mute"),
-        build_scenario("Can you increase the volume?", "increase"),
-        build_scenario("Can you turn it up?", "increase"),
-        build_scenario("Can you make it louder?", "increase"),
-        build_scenario("Can you turn it down?", "decrease"),
-        build_scenario("Can you decrease the volume?", "decrease"),
-        build_scenario("Can you lower the volume?", "decrease"),
+        # build_scenario("Increase volume please", "increase"),
+        #build_scenario("Decrease volume", "decrease"),
+        #build_scenario("Please lower the volume", "decrease"),
+        #build_scenario("Mute audio", "mute"),
+        #build_scenario("Please turn up the volume", "increase"),
+        #build_scenario("Please make it louder", "increase"),
+        #build_scenario("Turn the volume up, please.", "increase"),
+        #build_scenario("Can you decrease the volume?", "decrease"),
+        #build_scenario("Mute the audio", "mute"),
+        #build_scenario("Can you mute?", "mute"),
+        #build_scenario("Please mute", "mute"),
+        #build_scenario("Can you increase the volume?", "increase"),
+        #build_scenario("Can you turn it up?", "increase"),
+        #build_scenario("Can you make it louder?", "increase"),
+        #build_scenario("Can you turn it down?", "decrease"),
+        #build_scenario("Can you decrease the volume?", "decrease"),
+        #build_scenario("Can you lower the volume?", "decrease"),
     ]
 
     def get_name(self):
@@ -69,9 +69,12 @@ class VolumeControl:
         scenario = random.choice(self.scenarios)
 
         if bool(re.search(r'[{}]', scenario["user_input"])):
-            volume = select(self.specific_volume_values)
+            volume = random.choice(self.specific_volume_values)
+            
             scenario["user_input"] = scenario["user_input"].format(volume)
             scenario["expected"]["parameters"]["volume"] = volume
+
+        return scenario
     
     def are_valid_parameters(self, parameters):
         return isinstance(parameters, dict) and "volume" in parameters 

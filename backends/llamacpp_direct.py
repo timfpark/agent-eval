@@ -35,7 +35,7 @@ class LlamaCppDirect:
             self.model = self.model + self.build_system_content()
 
     def get_config_tag(self):
-        return f"llamacpp-direct:{self.model_nickname}"
+        return f"{self.model_nickname}:llamacpp-direct"
     
     def build_system_content(self):
         function_definitions = [function.get_definition() for function in self.functions]

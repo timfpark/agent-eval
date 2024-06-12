@@ -19,13 +19,12 @@ from functions.volume_control import VolumeControl
 
 functions = [Call(), FanControl(), GetCarTemperatureSetpoint(), LockDoors(), Navigate(), SetCarTemperatureSetpoint(), Text(), TuneRadio(), VolumeControl()]
 backends = [
+#    LlamaCppGuidance(model_nickname="gemma-7b-instruct-q4", model_path="./gemma-7b-it.gguf", functions=functions),
     LlamaCppGuidance(model_nickname="phi3-mini-4k-instruct-q4", model_path="./Phi-3-mini-4k-instruct-q4.gguf", functions=functions),
     LlamaCppGuidance(model_nickname="phi3-medium-4k-instruct-q4", model_path="./Phi-3-medium-4k-instruct-Q4_K_M.gguf", functions=functions),
-    LlamaCppGuidance(model_nickname="gemma-2b-instruct-q4", model_path="./Meta-Llama-3-8B-Instruct.Q4_0.gguf", functions=functions),
-    LlamaCppGuidance(model_nickname="gemma-7b-instruct-q4", model_path="./Meta-Llama-3-8B-Instruct.Q4_0.gguf", functions=functions),
     LlamaCppGuidance(model_nickname="llama3-8b-instruct-q4", model_path="./Meta-Llama-3-8B-Instruct.Q4_0.gguf", functions=functions),
+    LlamaCppGuidance(model_nickname="gemma-2b-instruct", model_path="./gemma-2b-it.gguf", functions=functions),
     LlamaCppDirect(model_nickname="phi3-mini-4k-instruct-q4", model_path="./Phi-3-mini-4k-instruct-q4.gguf", functions=functions),
-#    OllamaDirect(model_nickname="phi3-mini-4k-instruct-q4", model_tag="phi3:3.8b-mini-instruct-4k-q4_K_M", functions=functions),
 ]
  
 seed = random.randint(1, 100000)
