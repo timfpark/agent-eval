@@ -14,17 +14,16 @@ def build_scenario(user_input, volume):
     }
 
 class VolumeControl:
-    allowed_volume_values =  ["increase", "decrease", "mute", "15", "30", "45"]
+    allowed_volume_values =  ["increase", "decrease", "mute"]
 
     scenarios = [
-        build_scenario("Set volume to 45", "45"),
         build_scenario("Increase volume please", "increase"),
-        build_scenario("Set volume to 30", "30"),
         build_scenario("Decrease volume", "decrease"),
         build_scenario("Please lower the volume", "decrease"),
         build_scenario("Mute audio", "mute"),
         build_scenario("Please turn up the volume", "increase"),
-        build_scenario("Set volume to 15", "15"),
+        build_scenario("Please make it louder", "increase"),
+        build_scenario("Can you raise the volume?", "increase"),
     ]
 
     def get_name(self):
