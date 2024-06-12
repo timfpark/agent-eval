@@ -13,7 +13,7 @@ class TuneRadio:
         "Would you mind changing the radio station to {}, please?",
         "Could you set the radio to {} for me, please?",
         "Can you switch the radio to {}?",
-        "Could you dial in the radio to {} for me?"
+        "Could you adjust the radio to {} for me?"
     ]
 
     def get_name(self):
