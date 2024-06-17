@@ -8,12 +8,18 @@ class TuneRadio:
 
     templates = [
         "Can you tune the radio to {} please",
-        "Change the radio to {}",
+        "Change the radio station to {}",
         "Please tune to {} on the radio",
         "Would you mind changing the radio station to {}, please?",
         "Could you set the radio to {} for me, please?",
         "Can you switch the radio to {}?",
-        "Could you adjust the radio to {} for me?"
+        "Could you adjust the radio station to {} for me?",
+        "Would you mind tuning the radio to {}?",
+        "Can you please set the radio to {}?",
+        "Please change the radio station to {}",
+        "Can you change the radio station to {}?",
+        "Please tune the radio to {}",
+        "Can you tune the radio to {}?",
     ]
 
     def get_name(self):

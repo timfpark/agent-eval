@@ -107,7 +107,6 @@ class Text:
         "Maria Rossi",
         "Guillaume Lefevre",
         "Ana Novak",
-        "János Kovács",
         "Emma García",
         "Nils Johansson",
         "Klara Novakova",
@@ -127,7 +126,6 @@ class Text:
         "Oscar Martínez",
         "Viktor Orlov",
         "Elena Petrova",
-        "Tomáš Dvořák",
         "Maja Kowalczyk",
         "Luca Conti",
         "Anna Muller",
@@ -146,7 +144,6 @@ class Text:
         "Francesco Rizzo",
         "Gabriella Papadopoulos",
         "Lukas Schmidt",
-        "Veronika Kovářová",
         "Anders Larsen",
         "Marie Dupont",
         "Joana Santos",
@@ -157,7 +154,6 @@ class Text:
         "Laura Pop",
         "Hans Bauer",
         "Marta Fernández",
-        "Viktorija Pavlovic",
         "Dominik Novak",
         "Julia Schmidt",
         "Leif Johansson",
@@ -169,7 +165,6 @@ class Text:
         "Noemi Molnár",
         "Martin Karlsson",
         "Alina Morozova",
-        "László Szabó",
         "Katja Bergmann",
         "Anne Weber",
         "David Novák",
@@ -196,7 +191,6 @@ class Text:
         "Ewa Kowalski",
         "Anna Schmidt",
         "Dimitrios Papadopoulos",
-        "Tomáš Horák",
         "Victoria Pop",
         "Lars Lindberg",
         "Sander Nielsen",
@@ -212,11 +206,21 @@ class Text:
         "I am on my way",
         "I am stuck in traffic",
         "I am almost there",
-        "I am running behind"
+        "I am running behind",
+        "I am on my way home",
+        "I am on my way to the office",
+        "I am on my way to the store",
+        "I am on my way to the restaurant",
+        "I am on my way to the party",
+        "I am on my way to the meeting",
+        "I am on my way to the event"
     ]
 
     templates = [
         "Please text {} that {}",
+        "Please send a text to {} saying {}",
+        "Please send a text message to {} saying {}",
+        "Please text {} saying {}",
     ]
 
     def get_name(self):

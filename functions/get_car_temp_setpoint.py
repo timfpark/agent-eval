@@ -17,7 +17,6 @@ class GetCarTemperatureSetpoint:
         "Can you check the current temperature for me?",
         "Can you tell me the current temperature?",
         "Do you know what temperature the car is set to?",
-        "Can you tell me how warm or cool it is set?",
         "What’s the thermostat set to?",
         "Can you tell me the current temp?"
     ]   

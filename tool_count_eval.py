@@ -8,7 +8,6 @@ from functions.call import Call
 from functions.fan_control import FanControl
 from functions.get_car_temp_setpoint import GetCarTemperatureSetpoint
 from functions.lock_doors  import LockDoors
-from functions.pass_to_cloud import PassToCloud
 from functions.navigate import Navigate
 from functions.set_car_temp_setpoint import SetCarTemperatureSetpoint
 from functions.text import Text

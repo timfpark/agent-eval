@@ -23,6 +23,10 @@ class FanControl:
         build_scenario("Set fan to full", "max"),
         build_scenario("Full fan please", "max"),
         build_scenario("Turn the fan up", "increase"),
+        build_scenario("Turn the fan down", "decrease"),
+        build_scenario("Set fan to low", "low"),
+        build_scenario("Set fan to medium", "medium"),
+        build_scenario("Set fan to maximum", "max"),
     ]
 
     def get_name(self):

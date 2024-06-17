@@ -127,7 +127,6 @@ class Call:
         "Oscar Martínez",
         "Viktor Orlov",
         "Elena Petrova",
-        "Tomáš Dvořák",
         "Maja Kowalczyk",
         "Luca Conti",
         "Anna Muller",
@@ -157,7 +156,6 @@ class Call:
         "Laura Pop",
         "Hans Bauer",
         "Marta Fernández",
-        "Viktorija Pavlovic",
         "Dominik Novak",
         "Julia Schmidt",
         "Leif Johansson",
@@ -169,7 +167,6 @@ class Call:
         "Noemi Molnár",
         "Martin Karlsson",
         "Alina Morozova",
-        "László Szabó",
         "Katja Bergmann",
         "Anne Weber",
         "David Novák",
@@ -196,7 +193,6 @@ class Call:
         "Ewa Kowalski",
         "Anna Schmidt",
         "Dimitrios Papadopoulos",
-        "Tomáš Horák",
         "Victoria Pop",
         "Lars Lindberg",
         "Sander Nielsen",
@@ -207,6 +203,10 @@ class Call:
 
     templates = [
         "Please call {}",
+        "Please phone {}",
+        "Please make a video call to {}",
+        "Please dial {}",
+        "Please call {} on the phone",
     ]
 
     def get_name(self):

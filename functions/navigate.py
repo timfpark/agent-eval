@@ -46,22 +46,15 @@ class Navigate:
         "15 Avenue des Champs-Élysées, Paris, France",
         "1 Plaza Mayor, Madrid, Spain",
         "30 Via del Corso, Rome, Italy",
-        "175 Kurfürstendamm, Berlin, Germany",
         "60 Nevsky Prospect, Saint Petersburg, Russia",
         "42 O'Connell Street, Dublin, Ireland",
-        "85 Königsallee, Düsseldorf, Germany",
         "10 Kärntner Straße, Vienna, Austria",
         "25 Váci Street, Budapest, Hungary",
         "100 Oxford Street, London, United Kingdom",
-        "30 Strøget, Copenhagen, Denmark",
-        "50 Náměstí Svobody, Brno, Czech Republic",
-        "120 Mannerheimintie, Helsinki, Finland",
-        "40 Kungsportsavenyen, Gothenburg, Sweden",
         "90 Andrássy Avenue, Budapest, Hungary",
         "80 Drottninggatan, Stockholm, Sweden",
         "75 La Rambla, Barcelona, Spain",
         "60 Vesterbrogade, Copenhagen, Denmark",
-        "15 Piata Unirii, Bucharest, Romania",
         "20 Karl Johans gate, Oslo, Norway"
     ]
 
